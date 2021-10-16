@@ -1,0 +1,9 @@
+/vendor/
+/node_modules/
+/.idea/
+/docker/
+/.vagrant/
+
+.*.swp
+.env
+.phpunit.result.cache

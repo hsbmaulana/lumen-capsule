@@ -1,0 +1,116 @@
+version: "3"
+
+services:
+
+  core:
+
+    build:
+
+      context: "./"
+      dockerfile: "Dockerfile"
+      args:
+
+        APP_TIMEZONE: ${APP_TIMEZONE}
+        APP_NAME: ${APP_NAME}
+        APP_MODE: ${APP_ENV}
+        APP_LOG_LEVEL: ${APP_LOG_LEVEL}
+        APP_HOST: ${APP_HOST}
+        APP_PORT: ${APP_PORT}
+        # LARAVEL_ECHO_SERVER_HOST: ${LARAVEL_ECHO_SERVER_HOST} #
+        LARAVEL_ECHO_SERVER_PORT: ${LARAVEL_ECHO_SERVER_PORT}
+
+    image: "${APP_NAME}:1.0.0"
+
+    deploy:
+
+      mode: replicated
+      replicas: ${APP_SCALE_LENGTH}
+
+    depends_on:
+
+      - memory
+      - database
+
+    links:
+
+      - "memory:${APP_NAME}_memory"
+      - "database:${APP_NAME}_database"
+
+    # entrypoint: [] #
+    # command: ["tail", "-f", "/dev/null"] #
+
+    #########################################################################################################
+
+    ports:
+
+      - ${APP_PORT}
+      - ${LARAVEL_ECHO_SERVER_PORT}
+
+    volumes:
+
+      - "./phpunit.xml:/var/www/${APP_NAME}/phpunit.xml"
+
+      - "./routes/:/var/www/${APP_NAME}/routes/"
+
+      - "./app/:/var/www/${APP_NAME}/app/"
+      - "./tests/:/var/www/${APP_NAME}/tests/"
+      - "./public/:/var/www/${APP_NAME}/public/"
+
+      - "./resources/:/var/www/${APP_NAME}/resources/"
+      - "./config/:/var/www/${APP_NAME}/config/"
+      - "./database/:/var/www/${APP_NAME}/database/"
+      - "./storage/:/var/www/${APP_NAME}/storage/"
+
+    #########################################################################################################
+
+  memory:
+
+    image: redis:5.0.10
+
+    expose:
+
+      - "6379"
+
+    environment:
+
+      TZ: ${APP_TIMEZONE}
+
+    command: redis-server --requirepass ${MEMORY_PASSWORD}
+
+  database:
+
+    image: mariadb:10.5.8
+
+    expose:
+
+      - "3306"
+
+    environment:
+
+      TZ: ${APP_TIMEZONE}
+
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+
+  phpmyadmin:
+
+    image: phpmyadmin/phpmyadmin:4.8.3
+
+    ports:
+
+      - "80"
+
+    environment:
+
+      TZ: ${APP_TIMEZONE}
+
+      PMA_HOST: database
+
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+
+    depends_on:
+
+      - database
