@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Socket</title>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/laravel-echo/1.11.2/echo.iife.min.js"></script>
+<script type="text/javascript" src="http://127.0.0.1:????/socket.io/socket.io.js"></script>
+<style type="text/css"></style>
+</head>
+
+<body style="color: #FFF;">
+<script type="text/javascript">
+
+window.var =
+{
+    host: 'http://127.0.0.1',
+    port: '????',
+
+    csrf: '...',
+    socketkey: '9461a9c696592420e87a507621f80803',
+    authkey: 'C5D8Iy',
+};
+
+window.socket = new Echo(
+{
+    broadcaster: 'socket.io',
+    host: window.var.host + ':' + window.var.port,
+    authEndpoint: '/api/v1/socket/auth',
+
+    key : window.var.socketkey, // csrfToken : window.var.csrf, //
+
+    namespace: 'Tests.Integration.Events',
+    auth: { headers: { Authorization: 'Bearer' + ' ' + window.var.authkey, }, },
+    authorizer: {},
+});
+
+socket.private('user.?').listen('user.activated', function (event) {
+
+    console.log(event);
+});
+
+socket.private('auth.?').notification(function (notification) {
+
+    var { id, type, } = notification;
+
+    var { data, } = notification.data;
+
+    console.log(type === 'auth.activation');
+});
+
+</script>
+</body>
+</html>

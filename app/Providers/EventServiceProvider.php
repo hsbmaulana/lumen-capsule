@@ -10,7 +10,18 @@ class EventServiceProvider extends ServiceProvider
     /**
      * @var array
      */
-    protected $listen = [];
+    protected $listen =
+    [
+        \App\Events\Auth\Activated::class =>
+        [
+            \App\Listeners\Auth\Activated\Notif::class
+        ],
+
+        \App\Events\Auth\Deactivated::class =>
+        [
+            \App\Listeners\Auth\Deactivated\Notif::class
+        ],
+    ];
 
     /**
      * @return void
