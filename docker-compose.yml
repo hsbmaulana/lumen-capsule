@@ -16,8 +16,6 @@ services:
         APP_LOG_LEVEL: ${APP_LOG_LEVEL}
         APP_HOST: ${APP_HOST}
         APP_PORT: ${APP_PORT}
-        # LARAVEL_ECHO_SERVER_HOST: ${LARAVEL_ECHO_SERVER_HOST} #
-        LARAVEL_ECHO_SERVER_PORT: ${LARAVEL_ECHO_SERVER_PORT}
 
     image: "${APP_NAME}:1.0.0"
 
@@ -44,7 +42,6 @@ services:
     ports:
 
       - ${APP_PORT}
-      - ${LARAVEL_ECHO_SERVER_PORT}
 
     volumes:
 

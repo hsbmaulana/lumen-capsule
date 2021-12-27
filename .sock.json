@@ -1,11 +1,11 @@
 {
-    "clients": [ { "appId": "dac92986fdac1b1e", "key": "9461a9c696592420e87a507621f80803" } ],
+    "clients": [],
 
 
 
     "devMode": true,
-    "protocol": "http", "host": null, "port": "",
-    "authHost": "http://localhost:8080", "authEndpoint": "/api/v1/socket/auth",
+    "protocol": "http", "host": null, "port": 6001,
+    "authHost": "LARAVEL_ECHO_SERVER_AUTH_HOST", "authEndpoint": "/api/v1/socket/auth",
 
 
 
